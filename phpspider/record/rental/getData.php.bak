@@ -1,0 +1,43 @@
+<?php
+/**
+ * Created by PhpStorm.
+ * User: qiang
+ * Date: 2017/10/12
+ * Time: 下午5:16
+ */
+
+header('Content-type:text/html;charset=utf-8');
+
+$conn = mysql_connect('localhost:3306', 'root', 'root');
+
+mysql_query('set charset utf8');
+
+mysql_select_db('phpspider', $conn);
+
+$start = $_REQUEST['start'];
+$length = $_REQUEST['length'];
+
+$sql = "select * from rental where 1=1 limit $start,$length";
+$query = mysql_query($sql);
+$data = [];
+$rental_data = [];
+while($row = mysql_fetch_assoc($query)){
+    $row['title'] = "<a href = '".$row['url']."' target='blank'>". $row['title'] . "</a>";
+    unset($row['id']);
+    unset($row['url']);
+    $rental_data[]= $row;
+}
+$sql = "select * from rental where 1=1 ";
+$query = mysql_query($sql);
+$sum = mysql_num_rows($query);
+
+$data['recordsTotal'] = $sum;
+$data['recordsFiltered'] = $sum;
+$data['data'] = $rental_data;
+echo json_encode($data);
+
+
+
+
+
+
