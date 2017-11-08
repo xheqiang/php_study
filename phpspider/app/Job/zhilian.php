@@ -20,14 +20,14 @@ $configs = [
     'log_file' => '../../data/log/Job/zhilian.log',   //日志文件
     'log_type' => '', //记录日志类型
     'input_encoding' => null,   //输入编码 null 自动识别
-    'output_encoding' => null,   //写入编码
+    'output_encoding' => 'utf-8',   //写入编码
     'tasknum' => '1',   //同时工作的爬虫任务数
     'interval' => 2000, //爬取每个网页时间间隔 单位毫秒
     'timeout' => 5,     //每个网页超时时间 默认秒
     'max_try' => 5,     //失败最大尝试次数
     'max_depth' => 1,   //爬取网页深度
     'user_agent' => phpspider::AGENT_PC, //浏览器类型
-    'client_ip' => '180.97.33.107',   //爬虫IP
+    'client_ip' => '110.97.33.111',   //爬虫IP
     'export' => [       //导出类型
         'type' => 'db',
         'table' => 'job',  // 如果数据表没有数据新增请检查表结构和字段名是否匹配
@@ -41,13 +41,11 @@ $configs = [
     ],
     'domains' => [      //爬取哪些域名下的网页
         'zhaopin.com',
-        'sou.zhaopin.com'
+        'sou.zhaopin.com',
+        'jobs.zhaopin.com'
     ],
     'scan_urls' => [
         "http://sou.zhaopin.com/jobs/searchresult.ashx?jl=北京&kw=php&sm=0&p=1"
-    ],
-    'proxy' => [
-        "123.186.228.92:4321",
     ],
     'list_url_regexes' => [],
     'content_url_regexes' => [     //内容页面
@@ -57,6 +55,71 @@ $configs = [
         [
             'name' => "title",  //标题
             'selector' => "//div[5]/div[1]/div[1]/h1",
+            'required' => false,
+        ],
+        [
+            'name' => "url",  //网站地址
+            'selector' => "//div[@class='h1-tit rel']/h1",
+            'required' => false,
+        ],
+        [
+            'name' => "salary_min",  //薪水小
+            'selector' => "//div[6]/div[1]/ul/li[1]/strong/text()",
+            'required' => false,
+        ],
+        [
+            'name' => "salary_max",  //薪水大
+            'selector' => "//div[6]/div[1]/ul/li[1]/strong/text()",
+            'required' => false,
+        ],
+        [
+            'name' => "welfare",  //福利
+            'selector' => "//div[5]/div[1]/div[1]/div",
+            'required' => false,
+        ],
+        [
+            'name' => "experience",  //经验
+            'selector' => "//div[6]/div[1]/ul/li[5]/strong",
+            'required' => false,
+        ],
+        [
+            'name' => "education",  //学历
+            'selector' => "//div[6]/div[1]/ul/li[6]/strong",
+            'required' => false,
+        ],
+        [
+            'name' => "number",  //招聘人数
+            'selector' => "//div[6]/div[1]/ul/li[7]/strong",
+            'required' => false,
+        ],
+        [
+            'name' => "company",   //公司
+            'selector' => "//div[6]/div[2]/div[1]/p/a/text()",
+            'required' => false,
+        ],
+        [
+            'name' => "scale",   //规模
+            'selector' => "//div[6]/div[2]/div[1]/ul/li[1]/strong",
+            'required' => false,
+        ],
+        [
+            'name' => "nature",   //公司性质
+            'selector' => "//div[6]/div[2]/div[1]/ul/li[2]/strong",
+            'required' => false,
+        ],
+        [
+            'name' => "industry",  //公司行业
+            'selector' => "//div[6]/div[2]/div[1]/ul/li[3]/strong/a/text()",
+            'required' => false,
+        ],
+        [
+            'name' => "address",    //地址
+            'selector' => "//div[6]/div[2]/div[1]/ul/li[last()]/strong/text()",
+            'required' => false,
+        ],
+        [
+            'name' => "publish_date",  //发布日期
+            'selector' => "//div[6]/div[1]/ul/li[3]/strong/span/text()",
             'required' => false,
         ],
     ],
@@ -69,7 +132,8 @@ $spider->on_start = function ($phpspider) {
     db::set_connect('default', $db_config);
     db::init_mysql();
 
-    for ($i = 2; $i < 3; $i++)
+    //初步统计25页
+    for ($i = 2; $i < 26; $i++)
     {
         $url = "http://sou.zhaopin.com/jobs/searchresult.ashx?jl=北京&kw=php&sm=0&p={$i}";
         $phpspider->add_scan_url($url);
@@ -78,32 +142,33 @@ $spider->on_start = function ($phpspider) {
 
 $spider->on_extract_field = function ($fieldname, $data, $page) {
 
-    if ($fieldname == 'title' && !empty($data)) {
-        $data = str_replace('&#13;', '', $data);
-    }
-
-    if ($fieldname == 'area' && !empty($data)) {
-        preg_match_all('/\d+/', $data, $matchs);
-        if(!empty($matchs[0][1])){
-            $data = $matchs[0][1] . "㎡";
-        }
-    }
-
     if ($fieldname == 'url') {
         $data = $page['url'];
     }
 
-    if ($fieldname == 'method' && !empty($data)) {
+    if ($fieldname == 'salary_min') {
         $data = str_replace('元/月', '', $data);
+        if(strpos($data, '-')){
+            $arr = explode('-', $data);
+            $data = $arr[0];
+        }
     }
 
-    if ($fieldname == 'line') {
-        $data = '6号线';
+    if ($fieldname == 'salary_max') {
+        $data = str_replace('元/月', '', $data);
+        if(strpos($data, '-')){
+            $arr = explode('-', $data);
+            $data = $arr[1];
+        }
     }
 
-    if ($fieldname == 'updated_at') {
-        $data = str_replace('更新时间：', '', $data);
-        $data = date("Y-m-d H:i:s", strtotime($data));
+    if ($fieldname == 'welfare') {
+        $repalce_arr = ['<span>', '</span>'];
+        $data = str_replace($repalce_arr, ' ', $data);
+    }
+
+    if ($fieldname == 'number' || $fieldname == 'scale') {
+        $data = str_replace('人', '', $data);
     }
 
     $data = trim($data);
