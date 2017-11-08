@@ -88,12 +88,29 @@ return [
 
     //租房
     'rental' => '租房',
-    'rental_title' => '标题',
-    'rental_money' => '租金',
-    'rental_room' => '厅室',
-    'rental_area' => '面积',
-    'rental_method' => '出租方式',
+    'rental_title'   => '标题',
+    'rental_money'   => '租金',
+    'rental_room'    => '厅室',
+    'rental_area'    => '面积',
+    'rental_method'  => '出租方式',
     'rental_address' => '地址',
-    'rental_line' => '地铁线',
+    'rental_line'    => '地铁线',
+
+    //工作
+    'position'              => '职位',
+    'job_salary'            => '职位薪水',
+    'job_description'       => '职位描述',
+    'job_title'             => '职位描述',
+    'job_number'            => '招聘人数',
+    'job_experience'        => '工作经验',
+    'job_education'         => '学历',
+    'job_company'           => '公司名称',
+    'job_welfare'           => '公司福利',
+    'job_address'           => '工作地址',
+    'job_scale'             => '公司规模',
+    'job_nature'            => '公司性质',
+    'job_industry'          => '公司行业',
+    'job_publish_date'      => '发布时间',
+    'job_company_address'   => '公司|地址',
 
 ];

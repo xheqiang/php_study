@@ -71,7 +71,7 @@ class RentalController extends Controller
                 $filter->like('title', trans('admin::lang.rental_title'));
                 $filter->between('money', trans('admin::lang.rental_money'));
                 $filter->like('address', trans('admin::lang.rental_address'));
-                $filter->disableIdFilter();
+                //$filter->disableIdFilter();
             });
         });
     }
