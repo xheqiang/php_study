@@ -37,7 +37,7 @@ $configs = [
     'client_ip' => '180.97.33.107',   //爬虫IP
     'export' => [       //导出类型
         'type' => 'db',
-        'table' => 'rental',  // 如果数据表没有数据新增请检查表结构和字段名是否匹配
+        'table' => 'phpspider_rental',  // 如果数据表没有数据新增请检查表结构和字段名是否匹配
     ],
     'db_config' => [    //数据库配置
         'host' => '127.0.0.1',

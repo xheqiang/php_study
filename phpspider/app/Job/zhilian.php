@@ -30,7 +30,7 @@ $configs = [
     'client_ip' => '110.97.33.111',   //爬虫IP
     'export' => [       //导出类型
         'type' => 'db',
-        'table' => 'job',  // 如果数据表没有数据新增请检查表结构和字段名是否匹配
+        'table' => 'phpspider_job',  // 如果数据表没有数据新增请检查表结构和字段名是否匹配
     ],
     'db_config' => [    //数据库配置
         'host' => '127.0.0.1',
@@ -133,7 +133,7 @@ $spider->on_start = function ($phpspider) {
     db::init_mysql();
 
     //初步统计25页
-    for ($i = 2; $i < 26; $i++)
+    for ($i = 2; $i < 25; $i++)
     {
         $url = "http://sou.zhaopin.com/jobs/searchresult.ashx?jl=北京&kw=php&sm=0&p={$i}";
         $phpspider->add_scan_url($url);
