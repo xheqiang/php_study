@@ -40,14 +40,14 @@ class RentalController extends Controller
     {
         return Admin::grid(Rental::class, function (Grid $grid) {
             //$grid->id('ID')->sortable();
-            $grid->title(trans('admin::lang.rental_title'));
+            //$grid->title(trans('admin::lang.rental_title'));
             /*$grid->title(trans('admin::lang.rental_title'))->display(function ($title) {
                 return "<a href='https://www.baidu.com' target='_blank'>$title</a>";
             });*/
             //拼接链接
-            /*$grid->title(trans('admin::lang.rental_title'))->display(function () {
+            $grid->title(trans('admin::lang.rental_title'))->display(function () {
                 return "<a href='$this->url' target='_blank'>$this->title</a>";
-            });*/
+            });
             $grid->money(trans('admin::lang.rental_money'));
             $grid->room(trans('admin::lang.rental_room'));
             $grid->area(trans('admin::lang.rental_area'));

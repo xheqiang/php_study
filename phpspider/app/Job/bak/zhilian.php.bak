@@ -16,15 +16,16 @@ require_once __DIR__ . '/../../autoloader.php';
 
 //手动list
 $scan_url_list = [];
-for ($i = 0; $i < 32; $i++) {
-    $scan_url_list[] = "http://zu.fang.com/house1-j041/c20-d23500-g21-i3{$i}-n31-l310/";
+//page max 25
+for ($i = 1; $i < 2; $i++) {
+    $scan_url_list[] = "http://sou.zhaopin.com/jobs/searchresult.ashx?jl=%E5%8C%97%E4%BA%AC&kw=php&sm=0&sg=ffb61dc03c304d6e82b044ecbd82c8d7&p={$i}";
 }
 $scan_url_list = array_values($scan_url_list);
 
 $configs = [
-    'name' => '房天下-6号线',    //爬虫名称
+    'name' => '智联招聘-PHP',    //爬虫名称
     'log_show' => false,     //显示日志
-    'log_file' => '../../data/log/Rental/Line6.log',   //日志文件
+    'log_file' => '../../data/Job/zhilian.log',   //日志文件
     'log_type' => '', //记录日志类型
     'input_encoding' => null,   //输入编码 null 自动识别
     'output_encoding' => 'utf-8',   //写入编码
@@ -34,10 +35,10 @@ $configs = [
     'max_try' => 5,     //失败最大尝试次数
     'max_depth' => 1,   //爬取网页深度
     'user_agent' => phpspider::AGENT_PC, //浏览器类型
-    'client_ip' => '180.97.33.107',   //爬虫IP
+    'client_ip' => '110.97.33.111',   //爬虫IP
     'export' => [       //导出类型
         'type' => 'db',
-        'table' => 'rental',  // 如果数据表没有数据新增请检查表结构和字段名是否匹配
+        'table' => 'job',  // 如果数据表没有数据新增请检查表结构和字段名是否匹配
     ],
     'db_config' => [    //数据库配置
         'host' => '127.0.0.1',
@@ -47,82 +48,86 @@ $configs = [
         'name' => 'laravel_admin_study',
     ],
     'domains' => [      //爬取哪些域名下的网页
-        'fang.com',
-        'zu.fang.com'
+        'zhaopin.com',
+        'sou.zhaopin.com'
     ],
     'scan_urls' => $scan_url_list,
     'list_url_regexes' => [],
-    /*'scan_urls' => [    //定义爬虫的入口链接
-        'http://zu.fang.com/house1-j041/c20-d23500-g21-i30-n31-l310/'
-    ],
-    'list_url_regexes' => [     //列表页面
-        "http://zu.fang.com/house1-j041/c20-d23500-g21-i3\d+-n31-l310/"
-    ],*/
     'content_url_regexes' => [     //内容页面
-        "http://zu.fang.com/chuzu/.*.htm",
+        "http://jobs.zhaopin.com/.*.htm",
     ],
 
     'fields' => [
-        [
+        /*[
             'name' => "title",  //标题
-            'selector' => "//div[@class='h1-tit rel']/h1",
+            'selector' => "//div[5]/div[1]/div[1]/h1",
             'required' => false,
-        ],
-        [
+        ],*/
+        /*[
             'name' => "url",  //网站地址
             'selector' => "//div[@class='h1-tit rel']/h1",
             'required' => false,
         ],
         [
-            'name' => "room",   //厅室
-            'selector' => "//div[5]/div[3]/div[2]/ul[1]/li[2]/text()[2]",
+            'name' => "salary_min",  //薪水小
+            'selector' => "//div[@class='h1-tit rel']/h1",
             'required' => false,
         ],
         [
-            'name' => "area",   //面积
-            'selector' => "//div[5]/div[3]/div[2]/ul[1]/li[2]/span[4]",
+            'name' => "salary_max",  //薪水大
+            'selector' => "//div[6]/div[1]/ul/li[1]/strong/text()",
             'required' => false,
         ],
         [
-            'name' => "money",   //租金
+            'name' => "welfare",  //福利
+            'selector' => "//div[5]/div[1]/div[1]/div",
+            'required' => false,
+        ],
+        [
+            'name' => "experience",  //经验
+            'selector' => "//div[6]/div[1]/ul/li[5]/strong",
+            'required' => false,
+        ],
+        [
+            'name' => "education",  //学历
+            'selector' => "//div[6]/div[1]/ul/li[6]/strong",
+            'required' => false,
+        ],
+        [
+            'name' => "number",  //招聘人数
+            'selector' => "//div[6]/div[1]/ul/li[7]/strong",
+            'required' => false,
+        ],
+        [
+            'name' => "company",   //公司
+            'selector' => "//div[6]/div[2]/div[1]/p/a",
+            'required' => false,
+        ],
+        [
+            'name' => "scale",   //规模
+            'selector' => "//div[6]/div[2]/div[1]/ul/li[1]/strong",
+            'required' => false,
+        ],
+        [
+            'name' => "nature",   //公司性质
             'selector' => "//div[5]/div[3]/div[2]/ul[1]/li[1]/strong",
             'required' => false,
         ],
         [
-            'name' => "method",  //出租方式
+            'name' => "industry",  //公司行业
             'selector' => "//div[5]/div[3]/div[2]/ul[1]/li[1]/text()",
             'required' => false,
         ],
         [
-            'name' => "village",    //小区
-            'selector' => "//div/div/div/ul[@class='house-info']/li[3]/a[1]",
-            'required' => false,
-        ],
-        [
             'name' => "address",    //地址
-            'selector' => "//div[5]/div[3]/div[2]/ul[1]/li[4]/text()",
+            'selector' => "//div[6]/div[2]/div[1]/ul/li[5]/strong",
             'required' => false,
         ],
         [
-            'name' => "contacts",    //联系人
-            'selector' => "//div[5]/div[3]/div[2]/div/span[2]",
+            'name' => "publish_date",  //发布日期
+            'selector' => "//div[6]/div[1]/ul/li[3]/strong",
             'required' => false,
-        ],
-        [
-            'name' => "telphone",    //联系电话
-            'selector' => "//div[5]/div[3]/div[2]/div/span[1]",
-            'required' => false,
-        ],
-        [
-            'name' => "line",    //几号线
-            'selector' => "//div[6]/div[3]/div[2]/div[1]/span[1]",
-            'required' => false,
-        ],
-        [
-            'name' => "updated_at",  //更新时间
-            'selector' => "//div[5]/div[2]/p[1]/span[2]",
-            'required' => false,
-        ],
+        ],*/
     ],
 ];
 
@@ -136,32 +141,28 @@ $spider->on_start = function ($phpspider) {
 
 $spider->on_extract_field = function ($fieldname, $data, $page) {
 
-    if ($fieldname == 'title' && !empty($data)) {
-        $data = str_replace('&#13;', '', $data);
-    }
-
-    if ($fieldname == 'area' && !empty($data)) {
-        preg_match_all('/\d+/', $data, $matchs);
-        if(!empty($matchs[0][1])){
-            $data = $matchs[0][1] . "㎡";
-        }
-    }
-
     if ($fieldname == 'url') {
         $data = $page['url'];
     }
 
-    if ($fieldname == 'method' && !empty($data)) {
+    if ($fieldname == 'salar_min') {
         $data = str_replace('元/月', '', $data);
+        if(strpos($data, '-')){
+            $arr = explode('-', $data);
+            $data = $arr[0];
+        }
     }
 
-    if ($fieldname == 'line') {
-        $data = '6号线';
+    if ($fieldname == 'salar_max') {
+        $data = str_replace('元/月', '', $data);
+        if(strpos($data, '-')){
+            $arr = explode('-', $data);
+            $data = $arr[1];
+        }
     }
 
-    if ($fieldname == 'updated_at') {
-        $data = str_replace('更新时间：', '', $data);
-        $data = date("Y-m-d H:i:s", strtotime($data));
+    if ($fieldname == 'number' || $fieldname == 'scale') {
+        $data = str_replace('人', '', $data);
     }
 
     $data = trim($data);
