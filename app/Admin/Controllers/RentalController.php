@@ -68,10 +68,11 @@ class RentalController extends Controller
 
             //条件筛选查询
             $grid->filter(function ($filter) {
+                $filter->equal('id');
                 $filter->like('title', trans('admin::lang.rental_title'));
                 $filter->between('money', trans('admin::lang.rental_money'));
                 $filter->like('address', trans('admin::lang.rental_address'));
-                //$filter->disableIdFilter();
+                $filter->disableIdFilter();
             });
         });
     }
