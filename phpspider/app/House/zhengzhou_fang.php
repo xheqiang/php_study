@@ -36,7 +36,7 @@ $configs = [
     ],
     'db_config' => [    //数据库配置
         'host' => '127.0.0.1',
-        'port' => 3306,
+        'port' => 8806,
         'user' => 'vega',
         'pass' => 'vegagame',
         'name' => 'laravel_admin_study',
@@ -51,7 +51,7 @@ $configs = [
     ],
     'list_url_regexes' => [],
     'content_url_regexes' => [     //内容页面
-        "http://.*.fang.com",
+        "http://newhouse.zz.fang.com/house/.*",
     ],
     'fields' => [
         [

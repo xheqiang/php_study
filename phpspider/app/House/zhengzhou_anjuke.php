@@ -51,25 +51,25 @@ $configs = [
     ],
     'list_url_regexes' => [],
     'content_url_regexes' => [     //内容页面
-        "https://zz.fang.anjuke.com/loupan/\d+.html?.*",
+        "https://zz.fang.anjuke.com/loupan/\d+.html.*",
     ],
     'fields' => [
         [
             'name' => "name",  //楼盘名称
-            'selector' => "//*[@id=\"header\"]/div[3]/div/div[2]/h1",
+            'selector' => "//*[@id='header']/div[3]/div/div[2]/h1",
             'required' => false,
         ],
         [
             'name' => "url",  //网站地址
-            'selector' => "//*[@id=\"header\"]/div[3]/div/div[2]/h1",
+            'selector' => "//*[@id='header']/div[3]/div/div[2]/h1",
             'required' => false,
         ],
         [
             'name' => "money",  //均价
-            'selector' => "//*[@id=\"container\"]/div[1]/div[2]/div[1]/dl/dd[1]/p/em",
+            'selector' => "//*[@id=\"container\"]/div[1]/div[2]/div[1]/dl/dd[1]/p/em or //*[@id='container']/div[1]/div[2]/div[1]/dl/dd[2]/span",
             'required' => false,
         ],
-        /*[
+        [
             'name' => "address",  //地址
             'selector' => "//*[@id=\"container\"]/div[1]/div[2]/div[1]/dl/dd[4]/span",
             'required' => false,
@@ -113,7 +113,7 @@ $configs = [
             'name' => "telphone",   //电话
             'selector' => "//*[@id=\"phone_show_soj\"]/p/strong",
             'required' => false,
-        ]*/
+        ]
     ],
 ];
 

@@ -34,9 +34,9 @@ $configs = [
     ],
     'db_config' => [    //数据库配置
         'host' => '127.0.0.1',
-        'port' => 8806,
-        'user' => 'vega',
-        'pass' => 'vegagame',
+        'port' => 3306,
+        'user' => 'root',
+        'pass' => 'root',
         'name' => 'laravel_admin_study',
     ],
     'domains' => [      //爬取哪些域名下的网页
@@ -54,72 +54,72 @@ $configs = [
     'fields' => [
         [
             'name' => "title",  //标题
-            'selector' => "//div[5]/div[1]/div[1]/h1",
+            'selector' => "/html/body/div[5]/div[1]/div[1]/h1",
             'required' => false,
         ],
         [
             'name' => "url",  //网站地址
-            'selector' => "//div[@class='h1-tit rel']/h1",
+            'selector' => "/html/body/div[5]/div[1]/div[1]/h1",
             'required' => false,
         ],
         [
             'name' => "salary_min",  //薪水小
-            'selector' => "//div[6]/div[1]/ul/li[1]/strong/text()",
+            'selector' => "/html/body/div[6]/div[1]/ul/li[1]/strong/text()",
             'required' => false,
         ],
         [
             'name' => "salary_max",  //薪水大
-            'selector' => "//div[6]/div[1]/ul/li[1]/strong/text()",
+            'selector' => "/html/body/div[6]/div[1]/ul/li[1]/strong/text()",
             'required' => false,
         ],
         [
             'name' => "welfare",  //福利
-            'selector' => "//div[5]/div[1]/div[1]/div",
+            'selector' => "/html/body/div[5]/div[1]/div[1]/div",
             'required' => false,
         ],
         [
             'name' => "experience",  //经验
-            'selector' => "//div[6]/div[1]/ul/li[5]/strong",
+            'selector' => "/html/body/div[6]/div[1]/ul/li[5]/strong",
             'required' => false,
         ],
         [
             'name' => "education",  //学历
-            'selector' => "//div[6]/div[1]/ul/li[6]/strong",
+            'selector' => "/html/body/div[6]/div[1]/ul/li[6]/strong",
             'required' => false,
         ],
         [
             'name' => "number",  //招聘人数
-            'selector' => "//div[6]/div[1]/ul/li[7]/strong",
+            'selector' => "/html/body/div[6]/div[1]/ul/li[7]/strong",
             'required' => false,
         ],
         [
             'name' => "company",   //公司
-            'selector' => "//div[6]/div[2]/div[1]/p/a/text()",
+            'selector' => "/html/body/div[5]/div[1]/div[1]/h2/a/text()",
             'required' => false,
         ],
         [
             'name' => "scale",   //规模
-            'selector' => "//div[6]/div[2]/div[1]/ul/li[1]/strong",
+            'selector' => "/html/body/div[6]/div[2]/div[1]/ul/li[1]/strong",
             'required' => false,
         ],
         [
             'name' => "nature",   //公司性质
-            'selector' => "//div[6]/div[2]/div[1]/ul/li[2]/strong",
+            'selector' => "/html/body/div[6]/div[2]/div[1]/ul/li[2]/strong/text()",
             'required' => false,
         ],
         [
             'name' => "industry",  //公司行业
-            'selector' => "//div[6]/div[2]/div[1]/ul/li[3]/strong/a/text()",
+            'selector' => "/html/body/div[6]/div[2]/div[1]/ul/li[3]/strong/a",
             'required' => false,
         ],
         [
             'name' => "address",    //地址
-            'selector' => "//div[6]/div[2]/div[1]/ul/li[last()]/strong/text()",
+            'selector' => "/html/body/div[6]/div[2]/div[1]/ul/li[5]/strong/text()",
             'required' => false,
         ],
         [
             'name' => "publish_date",  //发布日期
-            'selector' => "//div[6]/div[1]/ul/li[3]/strong/span/text()",
+            'selector' => "/html/body/div[6]/div[1]/ul/li[3]/strong/span/text()",
             'required' => false,
         ],
     ],
@@ -133,7 +133,7 @@ $spider->on_start = function ($phpspider) {
     db::init_mysql();
 
     //初步统计25页
-    for ($i = 2; $i < 25; $i++)
+    for ($i = 2; $i < 28; $i++)
     {
         $url = "http://sou.zhaopin.com/jobs/searchresult.ashx?jl=北京&kw=php&sm=0&p={$i}";
         $phpspider->add_scan_url($url);

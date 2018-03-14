@@ -16,7 +16,7 @@ require_once __DIR__ . '/../../autoloader.php';
 
 //手动list
 $scan_url_list = [];
-for ($i = 0; $i < 32; $i++) {
+for ($i = 1; $i < 31; $i++) {
     $scan_url_list[] = "http://zu.fang.com/house1-j041/c20-d23500-g21-i3{$i}-n31-l310/";
 }
 $scan_url_list = array_values($scan_url_list);
@@ -41,9 +41,9 @@ $configs = [
     ],
     'db_config' => [    //数据库配置
         'host' => '127.0.0.1',
-        'port' => 8806,
-        'user' => 'vega',
-        'pass' => 'vegagame',
+        'port' => 3306,
+        'user' => 'root',
+        'pass' => 'root',
         'name' => 'laravel_admin_study',
     ],
     'domains' => [      //爬取哪些域名下的网页
@@ -65,52 +65,52 @@ $configs = [
     'fields' => [
         [
             'name' => "title",  //标题
-            'selector' => "//div[@class='h1-tit rel']/h1",
+            'selector' => "/html/body/div[5]/div[1]/div[1]",
             'required' => false,
         ],
         [
             'name' => "url",  //网站地址
-            'selector' => "//div[@class='h1-tit rel']/h1",
+            'selector' => "/html/body/div[5]/div[1]/div[1]",
             'required' => false,
         ],
         [
             'name' => "room",   //厅室
-            'selector' => "//div[5]/div[3]/div[2]/ul[1]/li[2]/text()[2]",
+            'selector' => "/html/body/div[5]/div[1]/div[3]/div[3]/div[2]/div[1]",
             'required' => false,
         ],
         [
             'name' => "area",   //面积
-            'selector' => "//div[5]/div[3]/div[2]/ul[1]/li[2]/span[4]",
+            'selector' => "/html/body/div[5]/div[1]/div[3]/div[3]/div[3]/div[1]",
             'required' => false,
         ],
         [
             'name' => "money",   //租金
-            'selector' => "//div[5]/div[3]/div[2]/ul[1]/li[1]/strong",
+            'selector' => "/html/body/div[5]/div[1]/div[3]/div[2]/div[1]/i",
             'required' => false,
         ],
         [
             'name' => "method",  //出租方式
-            'selector' => "//div[5]/div[3]/div[2]/ul[1]/li[1]/text()",
+            'selector' => "/html/body/div[5]/div[1]/div[3]/div[2]/div[1]/text()",
             'required' => false,
         ],
         [
             'name' => "village",    //小区
-            'selector' => "//div/div/div/ul[@class='house-info']/li[3]/a[1]",
+            'selector' => "/html/body/div[5]/div[1]/div[3]/div[5]/div[1]/div[2]/a[1]",
             'required' => false,
         ],
         [
             'name' => "address",    //地址
-            'selector' => "//div[5]/div[3]/div[2]/ul[1]/li[4]/text()",
+            'selector' => "/html/body/div[5]/div[1]/div[3]/div[5]/div[3]/div[2]/a",
             'required' => false,
         ],
         [
             'name' => "contacts",    //联系人
-            'selector' => "//div[5]/div[3]/div[2]/div/span[2]",
+            'selector' => "/html/body/div[5]/div[1]/div[3]/div[6]/div/div/div[2]/div[1]/span/a",
             'required' => false,
         ],
         [
             'name' => "telphone",    //联系电话
-            'selector' => "//div[5]/div[3]/div[2]/div/span[1]",
+            'selector' => "/html/body/div[5]/div[1]/div[3]/div[6]/div/div/div[2]/div[3]",
             'required' => false,
         ],
         [
@@ -120,7 +120,7 @@ $configs = [
         ],
         [
             'name' => "updated_at",  //更新时间
-            'selector' => "//div[5]/div[2]/p[1]/span[2]",
+            'selector' => "/html/body/div[5]/div[1]/p/span[2]",
             'required' => false,
         ],
     ],
@@ -160,7 +160,7 @@ $spider->on_extract_field = function ($fieldname, $data, $page) {
     }
 
     if ($fieldname == 'updated_at') {
-        $data = str_replace('更新时间：', '', $data);
+        $data = str_replace('更新时间 ', '', $data);
         $data = date("Y-m-d H:i:s", strtotime($data));
     }
 
