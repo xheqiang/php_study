@@ -34,8 +34,13 @@ $configs = [
     'max_try' => 5,     //失败最大尝试次数
     'max_depth' => 1,   //爬取网页深度
     'user_agent' => phpspider::AGENT_PC, //浏览器类型
-    'client_ip' => '180.97.33.107',   //爬虫IP
-    'export' => [       //导出类型
+    //'client_ip' => '180.97.33.107',   //爬虫IP
+    'client_ip' => [
+        '123.58.180.7',
+        '124.251.87.49',
+        '180.97.33.107'
+    ],
+        'export' => [       //导出类型
         'type' => 'db',
         'table' => 'phpspider_rental',  // 如果数据表没有数据新增请检查表结构和字段名是否匹配
     ],
