@@ -31,6 +31,21 @@ class HouseController extends Controller
         });
     }
 
+    public function edit($id)
+    {
+        
+    }
+
+    /**
+     * Create interface.
+     *
+     * @return Content
+     */
+    public function create()
+    {
+
+    }
+
     /**
      * Make a grid builder.
      *
@@ -70,6 +85,13 @@ class HouseController extends Controller
                 $display .= trans('admin::lang.house_mortgage') .  ":" . $this->mortgage . "<br>";
                 return $display;
             });
+            $grid->favorite(trans('admin::lang.house_favorite'))->display(function () {
+                if($this->favorite != 0){
+                   return "<a href='house/".$this->id."-0-".$_SERVER['QUERY_STRING']."/data'><img style='height:20px; width:20px;' src = '/img/is_favorite.png'></a>";
+                }else{
+                   return "<a href='house/".$this->id."-1-".$_SERVER['QUERY_STRING']."/data'><img style='height:20px; width:20px;' src = '/img/not_favorite.png'></a>";
+                }
+            });
 
             //禁用批量删除  $grid->disableBatchDeletion();
             $grid->tools(function (Grid\Tools $tools) {
@@ -84,7 +106,7 @@ class HouseController extends Controller
 
             //条件筛选查询
             $grid->filter(function ($filter) {
-                $filter->equal('id');   //需要加上改字段，否则导致搜索后第一个字段为空
+                $filter->equal('id')->select([]);  //需要加上改字段，否则导致搜索后第一个字段为空
                 $area_option = [
                     '和平' => '和平',
                     '河西' => '河西',
@@ -105,8 +127,23 @@ class HouseController extends Controller
                     '暂无数据' => '暂无数据',
                 ];
                 $filter->equal('elevator', trans('admin::lang.house_elevator'))->select($elevator_option);
+                $favorite_option = [
+                    '1' => '是',
+                    '0' => '否',
+                ];
+                $filter->equal('favorite', trans('admin::lang.house_favorite'))->select($favorite_option);
                 $filter->disableIdFilter();
             });
         });
+    }
+
+    public function operation($data)
+    {
+        $data = explode('-', $data);
+        $id = $data[0];
+        $favorite = $data[1];
+        $params = $data[2];
+        $status = House::where('id', '=', $id)->update(['favorite' => $favorite]);
+        return redirect('/house?' . $params);
     }
 }

@@ -138,5 +138,6 @@ return [
     'house_mortgage'    => '抵押',
     'house_title_village'    => '标题|小区',
     'house_area'    => '区域',
+    'house_favorite'    => '收藏',
 
 ];
