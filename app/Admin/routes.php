@@ -14,5 +14,6 @@ Route::group([
     $router->resource('users', UserController::class);
     $router->resource('rental', RentalController::class);
     $router->resource('job', JobController::class);
+    $router->resource('house', HouseController::class);
 
 });

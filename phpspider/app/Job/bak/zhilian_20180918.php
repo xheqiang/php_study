@@ -14,13 +14,6 @@ require_once __DIR__ . '/../../autoloader.php';
 /* Do NOT delete this comment */
 /* 不要删除这段注释 */
 
-//手动list
-$scan_url_list = [];
-for ($i = 1; $i < 19; $i++) {
-    $scan_url_list[] = "http://sou.zhaopin.com/jobs/searchresult.ashx?jl=北京&kw=php&sm=0&p={$i}";
-}
-$scan_url_list = array_values($scan_url_list);
-
 $configs = [
     'name' => '智联招聘-PHP',    //爬虫名称
     'log_show' => false,     //显示日志
@@ -33,12 +26,8 @@ $configs = [
     'timeout' => 5,     //每个网页超时时间 默认秒
     'max_try' => 5,     //失败最大尝试次数
     'max_depth' => 1,   //爬取网页深度
-    'user_agent' => phpspider::AGENT_ANDROID, //浏览器类型
-    'client_ip' => [
-        '123.58.180.7',
-        '124.251.87.49',
-        '180.97.33.107'
-    ],   //爬虫IP
+    'user_agent' => phpspider::AGENT_PC, //浏览器类型
+    'client_ip' => '110.97.33.111',   //爬虫IP
     'export' => [       //导出类型
         'type' => 'db',
         'table' => 'phpspider_job',  // 如果数据表没有数据新增请检查表结构和字段名是否匹配
@@ -55,8 +44,10 @@ $configs = [
         'sou.zhaopin.com',
         'jobs.zhaopin.com'
     ],
-    'scan_urls' => $scan_url_list,
-    //'list_url_regexes' => [],
+    'scan_urls' => [
+        "http://sou.zhaopin.com/jobs/searchresult.ashx?jl=北京&kw=php&sm=0&p=1"
+    ],
+    'list_url_regexes' => [],
     'content_url_regexes' => [     //内容页面
         "http://jobs.zhaopin.com/.*.htm.*",
     ],
@@ -140,6 +131,13 @@ $spider->on_start = function ($phpspider) {
     $db_config = $phpspider->get_config("db_config");
     db::set_connect('default', $db_config);
     db::init_mysql();
+
+    //初步统计25页
+    for ($i = 2; $i < 28; $i++)
+    {
+        $url = "http://sou.zhaopin.com/jobs/searchresult.ashx?jl=北京&kw=php&sm=0&p={$i}";
+        $phpspider->add_scan_url($url);
+    }
 };
 
 $spider->on_extract_field = function ($fieldname, $data, $page) {
