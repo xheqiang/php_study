@@ -199,6 +199,16 @@ $configs = [
             'selector' => "//div[@class='transaction']/div[@class='content']/ul/li[7]/span[2]",
             'required' => false,
         ],
+        /*[
+            'name' => "favorite",  //是否收藏
+            'selector' => "//div[@class='transaction']/div[@class='content']/ul/li[7]/span[2]",
+            'required' => false,
+        ],*/
+        [
+            'name' => "updated_at",  //更新时间
+            'selector' => "//div[@class='transaction']/div[@class='content']/ul/li[7]/span[2]",
+            'required' => false,
+        ],
     ],
 ];
 
@@ -211,25 +221,33 @@ $spider->on_start = function ($phpspider) {
 
     $scan_area = $phpspider->get_config("scan_area"); //新增配置不然无法获取
     $scan_config = $phpspider->get_config("scan_config");
-    foreach($scan_config as $skey => $sval){
-        for ($i = 1; $i <= $sval['page']; $i++){
+    foreach ($scan_config as $skey => $sval) {
+        for ($i = 1; $i <= $sval['page']; $i++) {
             $url = str_replace("page", $i, $sval['scan_url_rule']);
-            if($skey != $scan_area || $i != 1){   
+            if ($skey != $scan_area || $i != 1) {
                 $phpspider->add_scan_url($url);
             }
         }
     }
-    
+
 };
 
 $spider->on_extract_field = function ($fieldname, $data, $page) {
-
     if ($fieldname == 'url') {
         $data = $page['url'];
     }
-
     $data = trim($data);
     return $data;
+};
+
+$spider->on_extract_page = function ($page, $data) {
+    //url重复就不入库
+    $sql = "select count(*) as `count` from `phpspider_house` where `url` = '{$data['url']}'";
+    $row = db::get_one($sql);
+    if (!$row['count']) {
+        return $data;
+    }
+    return false;
 };
 
 $spider->start();
