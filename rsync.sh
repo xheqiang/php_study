@@ -1,0 +1,1 @@
+rsync -r --progress * root@mycloud:/var/www/Laravel_admin_study/
